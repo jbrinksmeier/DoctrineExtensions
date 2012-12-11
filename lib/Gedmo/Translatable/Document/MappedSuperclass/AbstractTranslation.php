@@ -5,10 +5,10 @@ namespace Gedmo\Translatable\Document\MappedSuperclass;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoODM;
 
 /**
-* Gedmo\Translatable\Document\MappedSuperclass\AbstractTranslation
-*
-* @MongoODM\MappedSuperclass
-*/
+ * Gedmo\Translatable\Document\MappedSuperclass\AbstractTranslation
+ *
+ * @MongoODM\MappedSuperclass
+ */
 abstract class AbstractTranslation
 {
     /**
@@ -52,6 +52,30 @@ abstract class AbstractTranslation
      * @MongoODM\String
      */
     protected $content;
+
+    /**
+     * @var array $hashContent
+     * @MongoODM\Hash
+     */
+    protected $hashContent;
+
+    /**
+     * @param array $hashContent
+     * @return AbstractTranslation
+     */
+    public function setHashContent($hashContent)
+    {
+        $this->hashContent = $hashContent;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHashContent()
+    {
+        return $this->hashContent;
+    }
 
     /**
      * Get id

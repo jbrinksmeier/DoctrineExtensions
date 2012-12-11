@@ -414,8 +414,12 @@ class TranslatableListener extends MappedEventSubscriber
                 $translated = '';
                 foreach ((array)$result as $entry) {
                     if ($entry['field'] == $field) {
-                        $translated = $entry['content'];
-                        break;
+                        $fieldType = $meta->getTypeOfField($field);
+                        if ('string' === $fieldType) {
+                            $translated = $entry['content'];
+                        } elseif ('hash' == $fieldType) {
+                            $translated = $entry['hashContent'];
+                        }
                     }
                 }
                 // update translation
@@ -550,8 +554,14 @@ class TranslatableListener extends MappedEventSubscriber
                 // set the translated field, take value using reflection
                 $value = $wrapped->getPropertyValue($field);
                 $content = $ea->getTranslationValue($object, $field);
-                $translation->setContent($content);
-                // check if need to update in database
+                if (is_string($content)) {
+                    $translation->setContent($content);
+                } elseif (is_array($content)) {
+                    if (count($content) === 1 && $content[0] === "") {
+                        $content = array();
+                    }
+                    $translation->setHashContent($content);
+                }                // check if need to update in database
                 $transWrapper = AbstractWrapper::wrap($translation, $om);
                 if (!empty($content) && ($isInsert || !$transWrapper->getIdentifier() || isset($changeSet[$field]))) {
                     if ($isInsert && !$objectId && !$ea->usesPersonalTranslation($translationClass)) {
