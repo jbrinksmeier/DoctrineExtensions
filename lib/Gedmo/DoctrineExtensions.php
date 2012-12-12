@@ -42,7 +42,7 @@ final class DoctrineExtensions
      * @param \Doctrine\ORM\Mapping\Driver\DriverChain $driverChain
      * @param \Doctrine\Common\Annotations\Reader $reader
      */
-    public static function registerMappingIntoDriverChainORM(DriverORM\DriverChain $driverChain, Reader $reader = null)
+    public static function registerMappingIntoDriverChainORM(Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $driverChain, Reader $reader = null)
     {
         self::registerAnnotations();
         if (!$reader) {
@@ -104,7 +104,7 @@ final class DoctrineExtensions
      * @param \Doctrine\ODM\MongoDB\Mapping\Driver\DriverChain $driverChain
      * @param \Doctrine\Common\Annotations\Reader $reader
      */
-    public static function registerAbstractMappingIntoDriverChainMongodbODM(DriverMongodbODM\DriverChain $driverChain, Reader $reader = null)
+    public static function registerAbstractMappingIntoDriverChainMongodbODM(\Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $driverChain, Reader $reader = null)
     {
         self::registerAnnotations();
         if (!$reader) {
