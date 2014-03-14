@@ -417,7 +417,7 @@ class TranslatableListener extends MappedEventSubscriber
                         $fieldType = $meta->getTypeOfField($field);
                         if ('string' === $fieldType) {
                             $translated = $entry['content'];
-                        } elseif ('hash' == $fieldType) {
+                        } elseif ('hash' == $fieldType || 'collection' == $fieldType) {
                             $translated = $entry['hashContent'];
                         }
                     }
