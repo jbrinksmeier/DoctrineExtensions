@@ -73,6 +73,15 @@ class TranslatableListener extends MappedEventSubscriber
     private $translationFallback = false;
 
     /**
+     * Disable this, if you don't want Gedmo to save
+     * new translations. Is disabled, new translations
+     * can only be inserted manually.
+     *
+     * @var boolean
+     */
+    private $persistNewTranslationsEnabled = true;
+
+    /**
      * List of translations which do not have the foreign
      * key generated yet - MySQL case. These translations
      * will be updated with new keys on postPersist event
@@ -137,6 +146,24 @@ class TranslatableListener extends MappedEventSubscriber
     {
         $this->skipOnLoad = (bool)$bool;
         return $this;
+    }
+
+    /**
+     * @param boolean $persistNewTranslationsEnabled
+     * @return TranslatableListener
+     */
+    public function setPersistNewTranslationsEnabled($persistNewTranslationsEnabled)
+    {
+        $this->persistNewTranslationsEnabled = (bool)$persistNewTranslationsEnabled;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPersistNewTranslationsEnabled()
+    {
+        return $this->persistNewTranslationsEnabled;
     }
 
     /**
@@ -316,6 +343,10 @@ class TranslatableListener extends MappedEventSubscriber
      */
     public function onFlush(EventArgs $args)
     {
+        if ($this->persistNewTranslationsEnabled === false) {
+            return;
+        }
+
         $ea = $this->getEventAdapter($args);
         $om = $ea->getObjectManager();
         $uow = $om->getUnitOfWork();
